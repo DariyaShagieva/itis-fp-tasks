@@ -146,12 +146,12 @@ test27 = testGroup "P27"
     prob27 4 [2,1,2] @?= Just (2,2)
   , testCase "prob27 4 [1,2,1] == N" $
     prob27 4 [1,2,1] @?= Nothing
-  , testCase "prob27 501 (take 500 [1..]) == (1, 500)" $
-    prob27 501 (take 500 [1..]) @?= Just (1, 500)
-  , testCase "prob27 1999 (take 1000 [1..]) == (999, 1000)" $
-    prob27 1999 (take 1000 [1..]) @?= Just (999, 1000)
-  , testCase "prob27 1999 (take 1000 [1..]) == (999, 1000)" $
-    prob27 1999 (take 1000 [1..]) @?= Just (999, 1000)
+  , testCase "prob27 501 [1..500] == (1, 500)" $
+    prob27 501 [1..500] @?= Just (1, 500)
+  , testCase "prob27 1999 [1..1000] == (999, 1000)" $
+    prob27 1999 [1..1000] @?= Just (999, 1000)
+  , testCase "prob27 3 [1..1000] == (1, 2)" $
+    prob27 3 [1..1000] @?= Just (1, 2)
   ]
 
 test28 :: TestTree
@@ -160,14 +160,14 @@ test28 = testGroup "P28"
     prob28 5 [3,1,1,1,2] @?= Just (2,1,1,1)
   , testCase "prob28 5 [3,2,1,1,5] == N" $
     prob28 5 [3,2,1,1,5] @?= Nothing
-  , testCase "prob28 1994 (take 500 [1..]) == (500, 499, 498, 497)" $
-    prob28 1994 (take 500 [1..]) @?= Just (500, 499, 498, 497)
-  , testCase "prob28 3994 (take 1000 [1..]) == (1000, 999, 998, 997)" $
-    prob28 3994 (take 1000 [1..]) @?= Just (1000, 999, 998, 997)
-  , testCase "prob28 10 (take 1000 [1..]) == (4, 3, 2, 1)" $
-    prob28 10 (take 1000 [1..]) @?= Just (4, 3, 2, 1)
-  , testCase "prob28 10^10 (take 1000 [1..]) == Nothing" $
-    prob28 (10^10) (take 1000 [1..]) @?= Nothing
+  , testCase "prob28 1994 [1..500] == (500, 499, 498, 497)" $
+    prob28 1994 [1..500] @?= Just (500, 499, 498, 497)
+  , testCase "prob28 3994 [1..1000] == (1000, 999, 998, 997)" $
+    prob28 3994 [1..1000] @?= Just (1000, 999, 998, 997)
+  , testCase "prob28 10 [1..1000] == (4, 3, 2, 1)" $
+    prob28 10 [1..1000] @?= Just (4, 3, 2, 1)
+  , testCase "prob28 10^10 [1..1000] == Nothing" $
+    prob28 (10^10) [1..1000] @?= Nothing
   ]
 
 test29 :: TestTree

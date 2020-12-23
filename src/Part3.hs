@@ -176,15 +176,20 @@ prob28 requiredSum inputList = do
     return (list !! 3, list !! 2, list !! 1, list !! 0)
     where
         subsets :: Int -> [a] -> [[a]]
-        subsets subLength listToHandle =
-            if subLength > length listToHandle
-            then []
-            else subsequencesBySize listToHandle !! (length listToHandle - subLength)
+        subsets subLength listToHandle
+            | subLength > length listToHandle = []
+            | otherwise = subsequencesBySize listToHandle !! (length listToHandle - subLength)
 
+        subsequencesBySize :: [a] -> [[[a]]]
         subsequencesBySize [] = [[[]]]
         subsequencesBySize (curHead : curTail) =
             let next = subsequencesBySize curTail
-            in zipWith (++) ([] : next) (map (map (curHead :)) next ++ [[]])
+            in zipWith (++) ([] : next) $  map (map (curHead :)) next ++ [[]]
+
+getSubsetsBySum :: Int -> Int -> [Int] -> [[Int]]
+getSubsetsBySum _         _      []                  = [] 
+getSubsetsBySum 1         reqSum inputList           = (map pure) $ filter (== reqSum) inputList
+getSubsetsBySum subLength reqSum (curHead : curTail) = undefined
 
 ------------------------------------------------------------
 -- PROBLEM #29
