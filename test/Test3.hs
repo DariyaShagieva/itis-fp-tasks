@@ -164,7 +164,9 @@ test28 = testGroup "P28"
     prob28 1994 (take 500 [1..]) @?= Just (500, 499, 498, 497)
   , testCase "prob28 3994 (take 1000 [1..]) == (1000, 999, 998, 997)" $
     prob28 3994 (take 1000 [1..]) @?= Just (1000, 999, 998, 997)
-  , testCase "prob28 3994 (take 1000 [1..]) == 10^10" $
+  , testCase "prob28 10 (take 1000 [1..]) == (4, 3, 2, 1)" $
+    prob28 10 (take 1000 [1..]) @?= Just (4, 3, 2, 1)
+  , testCase "prob28 10^10 (take 1000 [1..]) == Nothing" $
     prob28 (10^10) (take 1000 [1..]) @?= Nothing
   ]
 
