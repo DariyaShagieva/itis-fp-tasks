@@ -188,19 +188,19 @@ prob27 requiredSum (curHead : curTail) = withFixedCurrent curHead curTail
 
 prob28 :: Int -> [Int] -> Maybe (Int, Int, Int, Int)
 prob28 _ [] = Nothing
-prob28 requiredSum list = case withFixedCurrent requiredSum list of
+prob28 requiredSum list = case withFixedCurrent requiredSum 4 list of
     (toTuple : _) -> Just (toTuple !! 3, toTuple !! 2, toTuple !! 1, toTuple !! 0)
     [] -> Nothing
 
-withFixedCurrent :: Int -> [Int] -> [[Int]]
-withFixedCurrent _ [] = []
-withFixedCurrent sumOf curList@(_ : curTail) = withCurrentSum 4 sumOf curList
+withFixedCurrent :: Int -> Int -> [Int] -> [[Int]]
+withFixedCurrent _ _ [] = []
+withFixedCurrent len sumOf curList@(_ : curTail) = withCurrentSum len sumOf curList
     where
 
         withCurrentSum :: Int -> Int -> [Int] -> [[Int]]
         withCurrentSum _ _ [] = []
         withCurrentSum 1 innerSum inputList = (map pure) $ filter (== innerSum) inputList
-        withCurrentSum _ _ (_ : [])        = withFixedCurrent sumOf curTail
+        withCurrentSum l s (a : []) = map (a :) $ withFixedCurrent l s curTail
 
         withCurrentSum subLength innerSum (innerHead : innerTail) =
             map
