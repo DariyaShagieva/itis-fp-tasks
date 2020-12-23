@@ -168,28 +168,44 @@ prob27 requiredSum (curHead : curTail) = withFixedCurrent curHead curTail
 -- Найти в списке четыре числа, сумма которых равна
 -- заданному.
 -- Длина списка не превосходит 500
+--prob28 :: Int -> [Int] -> Maybe (Int, Int, Int, Int)
+--prob28 requiredSum inputList = do
+--    list <- find
+--            (\list -> sum list == requiredSum)
+--            $ subsets 4 inputList
+--    return (list !! 3, list !! 2, list !! 1, list !! 0)
+--    where
+--        subsets :: Int -> [a] -> [[a]]
+--        subsets subLength listToHandle
+--            | subLength > length listToHandle = []
+--            | otherwise = subsequencesBySize listToHandle !! (length listToHandle - subLength)
+--
+--        subsequencesBySize :: [a] -> [[[a]]]
+--        subsequencesBySize [] = [[[]]]
+--        subsequencesBySize (curHead : curTail) =
+--            let next = subsequencesBySize curTail
+--            in zipWith (++) ([] : next) $  map (map (curHead :)) next ++ [[]]
+
 prob28 :: Int -> [Int] -> Maybe (Int, Int, Int, Int)
-prob28 requiredSum inputList = do
-    list <- find
-            (\list -> sum list == requiredSum)
-            $ subsets 4 inputList
-    return (list !! 3, list !! 2, list !! 1, list !! 0)
+prob28 _ [] = Nothing
+prob28 requiredSum list = case withFixedCurrent requiredSum list of
+    (toTuple : _) -> Just (toTuple !! 3, toTuple !! 2, toTuple !! 1, toTuple !! 0)
+    [] -> Nothing
+
+withFixedCurrent :: Int -> [Int] -> [[Int]]
+withFixedCurrent _ [] = []
+withFixedCurrent sumOf curList@(_ : curTail) = withCurrentSum 4 sumOf curList
     where
-        subsets :: Int -> [a] -> [[a]]
-        subsets subLength listToHandle
-            | subLength > length listToHandle = []
-            | otherwise = subsequencesBySize listToHandle !! (length listToHandle - subLength)
 
-        subsequencesBySize :: [a] -> [[[a]]]
-        subsequencesBySize [] = [[[]]]
-        subsequencesBySize (curHead : curTail) =
-            let next = subsequencesBySize curTail
-            in zipWith (++) ([] : next) $  map (map (curHead :)) next ++ [[]]
+        withCurrentSum :: Int -> Int -> [Int] -> [[Int]]
+        withCurrentSum _ _ [] = []
+        withCurrentSum 1 innerSum inputList = (map pure) $ filter (== innerSum) inputList
+        withCurrentSum _ _ (_ : [])        = withFixedCurrent sumOf curTail
 
-getSubsetsBySum :: Int -> Int -> [Int] -> [[Int]]
-getSubsetsBySum _         _      []                  = [] 
-getSubsetsBySum 1         reqSum inputList           = (map pure) $ filter (== reqSum) inputList
-getSubsetsBySum subLength reqSum (curHead : curTail) = undefined
+        withCurrentSum subLength innerSum (innerHead : innerTail) =
+            map
+                (innerHead :)
+                $ withCurrentSum (pred subLength) (innerSum - innerHead) innerTail
 
 ------------------------------------------------------------
 -- PROBLEM #29
