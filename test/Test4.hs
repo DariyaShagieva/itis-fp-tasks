@@ -101,16 +101,44 @@ test39 = testGroup "P39" []
 
 test40 :: TestTree
 test40 = testGroup "P40"
-  [ testCase "varName_1:=123" $
+  [ testCase "trySplitByAssignmentOperator \"varName_1:=123\"" $
+    trySplitByAssignmentOperator "varName_1:=123" @?= Just ("varName_1", "123")
+  , testCase "trySplitByAssignmentOperator \":=123\"" $
+    trySplitByAssignmentOperator ":=123" @?= Just ("", "123")
+  , testCase "trySplitByAssignmentOperator \" := \"" $
+    trySplitByAssignmentOperator " := " @?= Just ("", "")
+  , testCase "trySplitByAssignmentOperator \" : = \"" $
+    trySplitByAssignmentOperator " : = " @?= Nothing
+  , testCase "trySplitByAssignmentOperator \":==\"" $
+    trySplitByAssignmentOperator ":==" @?= Nothing
+  , testCase "trySplitByAssignmentOperator \"varName := --1\"" $
+    trySplitByAssignmentOperator "varName := --1" @?= Just ("varName", "--1")
+
+  , testCase "isValidName" $
+    isValidVariableName "varName_1" @?= True
+  , testCase "variableValueParser" $
+    parse variableValueParser "varName_1 := 123" @?= Right 123
+  , testCase "takeInvalidTail \"varName_1 := 123\"" $
+    takeInvalidTail "varName_1 := 123" @?= ""
+  , testCase "takeInvalidTail \" - - 1\"" $
+    takeInvalidTail "varName_1 := 123" @?= ""
+  , testCase "takeInvalidTail \"varName_1 := 123\"" $
+    takeInvalidTail "varName_1 := 123" @?= ""
+
+  , testCase "varName_1:=123" $
     parse prob40 "varName_1:=123" @?= Right ("varName_1", 123)
   , testCase "theVAR  :=  -3456" $
     parse prob40 "theVAR  :=  -3456" @?= Right ("theVAR", -3456)
+  , testCase "varName_1234  :=  -  3456" $
+    parse prob40 "varName_1234  :=  -  3456" @?= Right ("varName_1234", -3456)
   , testCase "varName_1:=123:=123" $
     parse prob40 "varName_1:=123:=123" @?= Left "Can't parse"
   , testCase "VarName_1:=123" $
     parse prob40 "VarName_1:=-1" @?= Left "Can't parse"
   , testCase "varName:=-1" $
     parse prob40 "varName:=-1" @?= Right ("varName", -1)
+  , testCase "varName:=-1" $
+    parse prob40 "a:=0" @?= Right ("a", 0)
   , testCase ":=0" $
     parse prob40 ":=0" @?= Left "Can't parse"
   , testCase " := 123 " $
@@ -120,14 +148,15 @@ test40 = testGroup "P40"
   , testCase "_ := 123 " $
     parse prob40 "_ := 123 " @?= Left "Can't parse"
   , testCase "varName := 1234_" $
-    parse prob40 "varName := 1234_" @?= Left "Leftover: _"
-  --, testCase "varName := _1234_" $
-  --  parse prob40 "varName := _1234_" @?= Left "Can't parse"
+    parse prob40 "varName := 1234_invalid_" @?= Left "Leftover: _invalid_"
+  , testCase "varName := 1234-" $
+    parse prob40 "varName := 1234-" @?= Left "Leftover: -"
 
-  , testCase "varName:=-1" $
-    trySplitByAssignmentOperator "varName_1:=123" @?= Just ("varName_1", "123")
-  , testCase "isValidName" $
-    isValidVariableName "varName_1" @?= True
-  , testCase "variableValueParser" $
-    parse variableValueParser "varName_1 := 123" @?= Right 123    
+  , testCase "varName := --1" $
+    parse prob40 "varName := --1" @?= Left "Can't parse"
+  , testCase "varName := - - 1" $
+    parse prob40 "varName := - - 1" @?= Left "Can't parse"
+
+  , testCase "varName := _1234_" $
+    parse prob40 "varName := _1234_" @?= Left "Can't parse"
   ]

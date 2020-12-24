@@ -178,7 +178,6 @@ test30 = testGroup "P30"
   [ testCase "prob30 4 == 6"    $ prob30 4  @?= 6
   , testCase "prob30 5 == 28"   $ prob30 5  @?= 28
   , testCase "prob30 7 == 66"   $ prob30 7  @?= 36
-  , testCase "prob30 7 == 66"   $ prob30 7  @?= 36
   , testCase "prob30 16 == 120" $ prob30 16 @?= 120
   , testCase "prob30 20 == 528" $ prob30 20 @?= 528
   , testCase "prob30 24 == 630" $ prob30 24 @?= 630
