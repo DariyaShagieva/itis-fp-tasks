@@ -46,23 +46,27 @@ test34 = testGroup "P34"
     parse ((,,) <$> digitP <*> digitP <*> digitP) "12A" @?= Left "Can't parse"
   , testCase "pure" $
     parse (pure 123) "12" @?= Left "Leftover: 12"
-  --, testCase "composition" $
-  --  parse (pure (.) <*> testParser <*> test2Parser) "1" @?= Right ("", 1)
+  , testCase "composition" $
+    parse composedFuncParser "1" @?= parse directApplicationParser "1"
   ]
 
--- withCompositionOperator :: Parser Int
--- withCompositionOperator = pure (flip (.)) <*> charToCharParser <*> charToIntParser <*> digitP
+composedFuncParser :: Parser Int
+composedFuncParser = pure (flip (.)) <*> charToCharParser <*> charToIntParser <*> digitP
 
--- directApplication = charToIntParser <*> (charToCharParser <*> digitP)
+directApplicationParser :: Parser Int
+directApplicationParser = charToIntParser <*> (charToCharParser <*> digitP)
 
--- charToIntParser :: Parser (Char -> Int)
--- charToIntParser = undefined
+charToIntParser :: Parser (Char -> Int)
+charToIntParser = Parser parseFunc
+    where
+        parseFunc :: String -> [(String, (Char -> Int))]
+        parseFunc = undefined
 
--- charToCharParser :: Parser (Char -> Char)
--- charToCharParser = undefined
-
--- evenDigitParser :: Parser Char
--- evenDigitParser = satisfyP $ (flip elem) ['0', '2', '4', '6', '8']
+charToCharParser :: Parser (Char -> Char)
+charToCharParser = Parser parseFunc
+    where
+        parseFunc :: String -> [(String, (Char -> Char))]
+        parseFunc = undefined
 
 test35 :: TestTree
 test35 = testGroup "P35"
