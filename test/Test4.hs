@@ -66,7 +66,9 @@ charToCharParser :: Parser (Char -> Char)
 charToCharParser = Parser parseFunc
     where
         parseFunc :: String -> [(String, (Char -> Char))]
-        parseFunc = undefined
+        parseFunc input = case input of
+            "to_upper" -> [("", toUpper)]
+            _ -> [("", toLower)]
 
 test35 :: TestTree
 test35 = testGroup "P35"
